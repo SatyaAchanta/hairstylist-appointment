@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812754454206",
+    "project_id": "hairstylist-appointment",
+    "storage_bucket": "hairstylist-appointment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812754454206:android:7a8e50f046f079607640ef",
+        "android_client_info": {
+          "package_name": "com.satya.hairstylist_appointment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812754454206-6s879mikikirgb4cv4925106sg0t8rhu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV5mIzvf9W3kUL_IlpbBOWmDyiTunjjIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812754454206-6s879mikikirgb4cv4925106sg0t8rhu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
