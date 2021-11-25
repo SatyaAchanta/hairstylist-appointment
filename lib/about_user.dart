@@ -94,7 +94,7 @@ class _AboutUserState extends State<AboutUser> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        saveUserDetails(),
+                        saveUserDetails(userDetailsProvider);
                       } else {
                         const SnackBar(
                           content: Text("Please fill your information"),

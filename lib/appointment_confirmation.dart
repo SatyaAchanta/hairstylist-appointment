@@ -6,7 +6,7 @@ import 'package:hairstylist_appointment/models/appointment_details.dart';
 import 'package:provider/provider.dart';
 import 'models/appointment_details_provider.dart';
 import 'models/user_details_provider.dart';
-import 'storage/users.dart';
+import 'storage/userService.dart';
 
 class AppointmentConfirmation extends StatelessWidget {
   static const routeName = "/appointmentConfirmation";
@@ -37,7 +37,7 @@ class AppointmentConfirmation extends StatelessWidget {
   }
 
   void scheduleAppointment(
-    Users userStorage,
+    UserService userStorage,
     UserDetails user,
     AppointmentDetails appointmentDetails,
   ) {
@@ -46,7 +46,7 @@ class AppointmentConfirmation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Users userStorage = new Users();
+    final UserService userStorage = new UserService();
     final userProvider = Provider.of<UserDetailsProvider>(context);
     final appointment = Provider.of<AppointmentDetailsProvider>(context);
     MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -96,6 +96,28 @@ class AppointmentConfirmation extends StatelessWidget {
                 body: ListTile(
                   title: Text(
                     appointment.details.hairStylistName,
+                    style: GoogleFonts.robotoCondensed(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.0,
+                    ),
+                  ),
+                ),
+                isExpanded: true,
+              ),
+              ExpansionPanel(
+                headerBuilder: (BuildContext context, bool isExpanded) {
+                  return ListTile(
+                    title: Text(
+                      'Appointment Date',
+                      style: GoogleFonts.robotoCondensed(
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  );
+                },
+                body: ListTile(
+                  title: Text(
+                    appointment.details.appointmentDate,
                     style: GoogleFonts.robotoCondensed(
                       fontWeight: FontWeight.bold,
                       fontSize: 28.0,

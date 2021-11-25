@@ -41,7 +41,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: true,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -50,7 +50,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: true,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -59,7 +59,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: false,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -68,7 +68,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: true,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -77,7 +77,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: true,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -86,7 +86,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: false,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -95,7 +95,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: false,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
   Hairstylist(
@@ -104,7 +104,7 @@ final List<Hairstylist> hairstylists = [
     id: "1",
     ratings: 5,
     isAvailableToday: true,
-    timeSlots: timeSlots,
+    availableTimes: timeSlots,
     services: services,
   ),
 ];
@@ -131,7 +131,7 @@ bool isStylistAvailable(String name) {
 List<String> getStylistTimings(String name) {
   Hairstylist stylist =
       hairstylists.firstWhere((element) => element.name == name);
-  return stylist.timeSlots;
+  return stylist.availableTimes;
 }
 
 List<String> getStylistServices(String name) {

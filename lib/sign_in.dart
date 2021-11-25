@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hairstylist_appointment/models/user_details_provider.dart';
 import 'package:provider/provider.dart';
-import './storage/users.dart';
+import 'storage/userService.dart';
 import 'home.dart';
 import 'social_sign_in.dart';
 
@@ -15,7 +15,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final Users users = new Users();
+  final UserService users = new UserService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   void handleSignIn(
     String signInType,

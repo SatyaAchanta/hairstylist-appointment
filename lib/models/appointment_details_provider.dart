@@ -7,6 +7,7 @@ class AppointmentDetailsProvider extends ChangeNotifier {
   AppointmentDetailsProvider() {
     appointmentDetails.appointmentTime = "";
     appointmentDetails.hairStylistName = "";
+    appointmentDetails.appointmentDate = "";
     appointmentDetails.selectedServices = [];
   }
 
@@ -22,6 +23,11 @@ class AppointmentDetailsProvider extends ChangeNotifier {
 
   set servicesSelected(List<String> selectedServices) {
     appointmentDetails.selectedServices = selectedServices;
+    notifyListeners();
+  }
+
+  set appointmentDateSelected(String appointmentDate) {
+    appointmentDetails.appointmentDate = appointmentDate;
     notifyListeners();
   }
 

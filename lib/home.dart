@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hairstylist_appointment/models/user_details_provider.dart';
@@ -21,9 +23,33 @@ class _HomeState extends State<Home> {
   String selectedStylistValue = stylistNames[0];
   List<String> stylistTimings = [];
   List<String> hairStylistServices = [];
+  DateTime appointmentDate = DateTime.now();
 
   retrieveAvailableTimings(String selectedHairstylist) {
     stylistTimings = getStylistTimings(selectedHairstylist);
+  }
+
+  Future<void> _selectDate(
+    BuildContext context,
+    AppointmentDetailsProvider appointmentDetailsProvider,
+  ) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: appointmentDate,
+      firstDate: DateTime(
+          appointmentDate.year, appointmentDate.month, appointmentDate.day),
+      lastDate: DateTime(
+        appointmentDate.year,
+        appointmentDate.month,
+        appointmentDate.day + 7, // only accept appointments for next one week
+      ),
+    );
+    if (pickedDate != null && pickedDate != appointmentDate)
+      setState(() {
+        appointmentDate = pickedDate;
+        appointmentDetailsProvider.appointmentDetails.appointmentDate =
+            DateFormat.MMMEd().format(appointmentDate);
+      });
   }
 
   @override
@@ -143,6 +169,34 @@ class _HomeState extends State<Home> {
                     overflow: TextOverflow.fade,
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      vertical: deviceSize.height * 0.01,
+                      horizontal: deviceSize.width * 0.02,
+                    ),
+                    child: Text(
+                      DateFormat.MMMEd().format(appointmentDate),
+                      style: GoogleFonts.roboto(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => this._selectDate(
+                      context,
+                      appointmentDetails,
+                    ),
+                    iconSize: 20,
+                    icon: Icon(
+                      Icons.edit,
+                    ),
+                  ),
+                ],
               ),
               Container(
                 margin: EdgeInsets.only(

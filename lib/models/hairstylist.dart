@@ -5,14 +5,14 @@ class Hairstylist {
   String gender;
   bool isAvailableToday;
   String profileImage;
-  List<String> timeSlots;
+  List<String> availableTimes;
   List<String> services;
 
   Hairstylist({
     required this.name,
     required this.gender,
     required this.isAvailableToday,
-    required this.timeSlots,
+    required this.availableTimes,
     required this.services,
     this.id = "sample",
     this.ratings = 5,
@@ -25,7 +25,7 @@ class Hairstylist {
         this.id = json["id"],
         this.ratings = int.parse(json["ratings"]),
         this.isAvailableToday = true,
-        this.timeSlots = json["timeSlots"],
+        this.availableTimes = json["timeSlots"],
         this.profileImage = json["profileImage"],
         this.services = json["Services"];
 
@@ -35,7 +35,7 @@ class Hairstylist {
         'id': this.id,
         'ratings': this.ratings,
         'isAvailableToday': true,
-        'timeSlots': this.timeSlots,
+        'timeSlots': this.availableTimes,
         'profileImage': this.profileImage,
         'services': this.services
       };

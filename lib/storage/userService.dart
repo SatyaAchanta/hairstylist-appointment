@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hairstylist_appointment/models/appointment_details.dart';
 import '../models/user_details.dart';
 
-class Users {
+class UserService {
   CollectionReference _users = FirebaseFirestore.instance.collection('users');
   CollectionReference _appointments =
       FirebaseFirestore.instance.collection('appointments');
@@ -31,15 +31,17 @@ class Users {
       AppointmentDetails appointmentDetails, UserDetails user) {
     var dt = DateTime.now();
     var newFormat = DateFormat("yy-MM-dd");
-    String curretnDate = newFormat.format(dt);
+    String currentDate = newFormat.format(dt);
 
-    String documentId = user.email! + "_" + curretnDate;
+    String documentId =
+        user.email! + "_" + currentDate + "_" + dt.second.toString();
 
     try {
       return _appointments.doc(documentId).set({
         'appointmentTime': appointmentDetails.appointmentTime,
         'services': appointmentDetails.selectedServices,
         'stylist': appointmentDetails.hairStylistName,
+        'appointmentDate': appointmentDetails.appointmentDate,
       });
     } on Exception {
       print("---- couldn't write to appointments collection");
