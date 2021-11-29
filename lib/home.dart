@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hairstylist_appointment/models/user_details_provider.dart';
@@ -10,6 +9,7 @@ import 'services.dart';
 import 'models/sample_data.dart';
 import 'models/user_details.dart';
 import 'models/appointment_details_provider.dart';
+import 'storage/hairstylistService.dart';
 
 class Home extends StatefulWidget {
   static const routeName = "/stylistOverview";
@@ -20,14 +20,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final HairstylistService hairstylistService = new HairstylistService();
   String selectedStylistValue = stylistNames[0];
   List<String> stylistTimings = [];
   List<String> hairStylistServices = [];
   DateTime appointmentDate = DateTime.now();
-
-  retrieveAvailableTimings(String selectedHairstylist) {
-    stylistTimings = getStylistTimings(selectedHairstylist);
-  }
 
   Future<void> _selectDate(
     BuildContext context,
@@ -45,17 +42,33 @@ class _HomeState extends State<Home> {
       ),
     );
     if (pickedDate != null && pickedDate != appointmentDate)
-      setState(() {
-        appointmentDate = pickedDate;
-        appointmentDetailsProvider.appointmentDetails.appointmentDate =
-            DateFormat.MMMEd().format(appointmentDate);
-      });
+      setState(
+        () {
+          appointmentDate = pickedDate;
+          appointmentDetailsProvider.appointmentDetails.appointmentDate =
+              DateFormat.MMMEd().format(appointmentDate);
+
+          stylistTimings.clear();
+        },
+      );
+  }
+
+  void getStylistTimings(String stylistName, DateTime appointmentDate) async {
+    List<String> timings = await hairstylistService.getStylistTimings(
+      selectedStylistValue,
+      appointmentDate,
+    );
+
+    setState(() {
+      stylistTimings.clear();
+      stylistTimings.addAll(timings);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    stylistTimings = getStylistTimings(selectedStylistValue);
+    print("---- inside initState");
   }
 
   @override
@@ -110,7 +123,10 @@ class _HomeState extends State<Home> {
                               selectedStylistValue = value!,
                               this.hairStylistServices =
                                   getStylistServices(selectedStylistValue),
-                              retrieveAvailableTimings(selectedStylistValue),
+                              getStylistTimings(
+                                selectedStylistValue,
+                                appointmentDate,
+                              ),
                               appointmentDetails
                                   .setHairStylistName(selectedStylistValue),
                             });
@@ -198,21 +214,38 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              Container(
-                margin: EdgeInsets.only(
-                  top: deviceSize.height * 0.01,
-                ),
-                child: GroupButton(
-                    spacing: 10,
-                    selectedColor: Colors.green,
-                    borderRadius: BorderRadius.circular(5.0),
-                    buttons: stylistTimings,
-                    onSelected: (i, selected) => {
-                          print("Yes"),
-                          print(stylistTimings[i]),
-                          appointmentDetails.appointmentTime =
-                              stylistTimings[i],
-                        }),
+              FutureBuilder<List<String>>(
+                future: hairstylistService.getStylistTimings(
+                    selectedStylistValue,
+                    appointmentDate), // function where you call your api
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<String>> snapshot) {
+                  // AsyncSnapshot<Your object type>
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: Text('Please wait its loading...'));
+                  } else {
+                    if (snapshot.hasError)
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    else
+                      return Container(
+                        margin: EdgeInsets.only(
+                          top: deviceSize.height * 0.01,
+                        ),
+                        child: GroupButton(
+                          spacing: 10,
+                          selectedColor: Colors.green,
+                          borderRadius: BorderRadius.circular(5.0),
+                          buttons: snapshot.data!.toList(),
+                          onSelected: (i, selected) => {
+                            print("Yes"),
+                            print(stylistTimings[i]),
+                            appointmentDetails.appointmentTime =
+                                stylistTimings[i],
+                          },
+                        ),
+                      );
+                  }
+                },
               ),
               Container(
                 margin: EdgeInsets.only(

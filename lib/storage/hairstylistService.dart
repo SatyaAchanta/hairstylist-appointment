@@ -1,29 +1,34 @@
+import 'dart:collection';
+
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HairstylistService {
   CollectionReference _timings =
       FirebaseFirestore.instance.collection('stylists');
-  void getStylistTimings(String name, DateTime appointmentDate) {
-    DocumentReference _stylistDoc = _timings.doc(name);
-    var newFormat = DateFormat("yy-MM-dd");
+
+  Future<List<String>> getStylistTimings(
+      String name, DateTime appointmentDate) async {
+    List<String> _availableTimes = [];
+    DocumentReference _stylistDoc = _timings.doc(name.toLowerCase());
+    var newFormat = DateFormat("yyyy-MM-dd");
     String _customerPreferredDate = newFormat.format(appointmentDate);
     CollectionReference _availableDates = _stylistDoc.collection("schedule");
 
     DocumentReference _schedule = _availableDates.doc(_customerPreferredDate);
 
-    _schedule
-        .get()
-        .then(
-          (value) => {
-            print("---- value is $value"),
-          },
-        )
-        .catchError(
-          (error) => {
-            print("--- unable to retrieve data due to $error"),
-          },
-        );
+    var docSnapshot = await _schedule.get();
+
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? timings =
+          docSnapshot.data() as Map<String, dynamic>?;
+
+      List<String> timingsSample =
+          new List<String>.from(timings!["availableTimes"]);
+
+      return timingsSample;
+    }
+
+    return [];
   }
 }
