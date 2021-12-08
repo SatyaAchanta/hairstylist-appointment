@@ -1,16 +1,14 @@
-import 'dart:collection';
-
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HairstylistService {
-  CollectionReference _timings =
+  CollectionReference _stylists =
       FirebaseFirestore.instance.collection('stylists');
 
   Future<List<String>> getStylistTimings(
       String name, DateTime appointmentDate) async {
     List<String> _availableTimes = [];
-    DocumentReference _stylistDoc = _timings.doc(name.toLowerCase());
+    DocumentReference _stylistDoc = _stylists.doc(name.toLowerCase());
     var newFormat = DateFormat("yyyy-MM-dd");
     String _customerPreferredDate = newFormat.format(appointmentDate);
     CollectionReference _availableDates = _stylistDoc.collection("schedule");

@@ -2,6 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class SocialSignIn {
+  // Checks for whether user session exists
+  bool isUserLoggedIn() {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    return currentUser != null ? true : false;
+  }
+
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

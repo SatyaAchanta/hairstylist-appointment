@@ -1,85 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hairstylist_appointment/models/user_details_provider.dart';
-import 'package:provider/provider.dart';
-import 'storage/userService.dart';
-import 'home.dart';
+import '../controller/user_auth.dart';
+import '../storage/userService.dart';
+import '../about_stylist.dart';
 import 'social_sign_in.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
-
-  @override
-  State<SignIn> createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
+class SignIn extends StatelessWidget {
   final UserService users = new UserService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  void handleSignIn(
-    String signInType,
-    SocialSignIn socialSignIn,
-    UserDetailsProvider userProvider,
-    BuildContext context,
-    TextEditingController emailController,
-    TextEditingController passwordController,
-  ) async {
-    switch (signInType) {
-      case "google":
-        {
-          UserCredential userCredential = await socialSignIn.signInWithGoogle();
-
-          print("---- userCredential is ${userCredential.toString()}");
-
-          if (userCredential.user != null) {
-            print("---- user is ${userCredential.user}");
-            userProvider.setUserInfo(
-              userCredential.user!.email!,
-              userCredential.user!.displayName!,
-            );
-            users.addUser(
-              userCredential.user!.email!,
-              userCredential.user!.displayName!,
-            );
-            Navigator.of(context).pushNamed(Home.routeName);
-          }
-
-          // Navigator.of(context).pushNamed(StylistOverview.routeName);
-          print("sign in with google succeeded");
-        }
-
-        break;
-      case "email":
-        {
-          try {
-            UserCredential userCredential = await socialSignIn.signInWithEmail(
-              emailController.text,
-              passwordController.text,
-            );
-            print("--- userCredential is ${userCredential.user}");
-            userProvider.setUserInfo(
-              userCredential.user!.email!,
-              userCredential.user!.displayName != null
-                  ? userCredential.user!.displayName!
-                  : "",
-            );
-            Navigator.of(context).pushNamed(Home.routeName);
-          } on Exception catch (e) {
-            print(e);
-            print("--- email sign in failed");
-          }
-        }
-        break;
-      default:
-    }
-  }
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
+  SocialSignIn signIn = new SocialSignIn();
+  UserAuthController authController = Get.put(UserAuthController());
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController _emailController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
-    final userDetailsProvider = Provider.of<UserDetailsProvider>(context);
     MediaQueryData mediaQuery = MediaQuery.of(context);
     Size deviceSize = mediaQuery.size;
     SocialSignIn socialSignIn = new SocialSignIn();
@@ -109,20 +48,13 @@ class _SignInState extends State<SignIn> {
                 style: OutlinedButton.styleFrom(
                   primary: Colors.black,
                 ),
-                onPressed: () {
-                  handleSignIn(
-                    "google",
-                    socialSignIn,
-                    userDetailsProvider,
-                    context,
-                    _emailController,
-                    _passwordController,
-                  );
-                },
                 child: Text(
                   "Login with Google",
                   style: GoogleFonts.roboto(fontSize: 16.0),
                 ),
+                onPressed: () {
+                  authController.signInWithGoogle();
+                },
               ),
             ),
             Container(
@@ -163,14 +95,14 @@ class _SignInState extends State<SignIn> {
                           primary: Colors.black,
                         ),
                         onPressed: () {
-                          this.handleSignIn(
-                            "email",
-                            socialSignIn,
-                            userDetailsProvider,
-                            context,
-                            _emailController,
-                            _passwordController,
-                          );
+                          // this.handleSignIn(
+                          //   "email",
+                          //   socialSignIn,
+                          //   userDetailsProvider,
+                          //   context,
+                          //   _emailController,
+                          //   _passwordController,
+                          // );
                         },
                         child: Text(
                           "Login With Email",

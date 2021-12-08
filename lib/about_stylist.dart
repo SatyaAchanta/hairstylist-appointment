@@ -1,85 +1,68 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hairstylist_appointment/models/user_details_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
-import 'services.dart';
 import 'models/sample_data.dart';
 import 'models/user_details.dart';
 import 'models/appointment_details_provider.dart';
+import 'models/user_details_provider.dart';
 import 'storage/hairstylistService.dart';
 
-class Home extends StatefulWidget {
-  static const routeName = "/stylistOverview";
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
+class AboutStylist extends StatelessWidget {
   final HairstylistService hairstylistService = new HairstylistService();
-  String selectedStylistValue = stylistNames[0];
-  List<String> stylistTimings = [];
-  List<String> hairStylistServices = [];
-  DateTime appointmentDate = DateTime.now();
+  static const routeName = "/stylistOverview";
 
   Future<void> _selectDate(
     BuildContext context,
     AppointmentDetailsProvider appointmentDetailsProvider,
+    DateTime today,
+    DateTime selectedDate,
   ) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: appointmentDate,
-      firstDate: DateTime(
-          appointmentDate.year, appointmentDate.month, appointmentDate.day),
+      initialDate: today,
+      firstDate: DateTime(today.year, today.month, today.day),
       lastDate: DateTime(
-        appointmentDate.year,
-        appointmentDate.month,
-        appointmentDate.day + 7, // only accept appointments for next one week
+        today.year,
+        today.month,
+        today.day + 7, // only accept appointments for next one week
       ),
     );
-    if (pickedDate != null && pickedDate != appointmentDate)
-      setState(
-        () {
-          appointmentDate = pickedDate;
-          appointmentDetailsProvider.appointmentDetails.appointmentDate =
-              DateFormat.MMMEd().format(appointmentDate);
+    if (pickedDate != null && pickedDate != today) selectedDate = pickedDate;
+    appointmentDetailsProvider.appointmentDetails.appointmentDate =
+        DateFormat.MMMEd().format(selectedDate);
 
-          stylistTimings.clear();
-        },
-      );
+    // stylistTimings.clear();
   }
 
   void getStylistTimings(String stylistName, DateTime appointmentDate) async {
     List<String> timings = await hairstylistService.getStylistTimings(
-      selectedStylistValue,
+      stylistName,
       appointmentDate,
     );
 
-    setState(() {
+    // TODO: replace this with provider call
+    /*setState(() {
       stylistTimings.clear();
       stylistTimings.addAll(timings);
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    print("---- inside initState");
+    });*/
   }
 
   @override
   Widget build(BuildContext context) {
     final userDetailsProvider = Provider.of<UserDetailsProvider>(context);
+    final appointmentDetails = Provider.of<AppointmentDetailsProvider>(context);
+
     MediaQueryData mediaQuery = MediaQuery.of(context);
     Size deviceSize = mediaQuery.size;
-    final appointmentDetails =
-        Provider.of<AppointmentDetailsProvider>(context, listen: false);
-
     UserDetails user = userDetailsProvider.userInfo;
+    String selectedStylistValue = stylistNames[0];
+    List<String> stylistTimings = [];
+    List<String> hairStylistServices = [];
+    DateTime today = DateTime.now();
+    DateTime selectedDate = DateTime.now();
 
     return SafeArea(
       child: Scaffold(
@@ -119,17 +102,10 @@ class _HomeState extends State<Home> {
                       ),
                       elevation: 0,
                       onChanged: (String? value) {
-                        setState(() => {
-                              selectedStylistValue = value!,
-                              this.hairStylistServices =
-                                  getStylistServices(selectedStylistValue),
-                              getStylistTimings(
-                                selectedStylistValue,
-                                appointmentDate,
-                              ),
-                              appointmentDetails
-                                  .setHairStylistName(selectedStylistValue),
-                            });
+                        selectedStylistValue = value!;
+                        getStylistTimings(selectedStylistValue, selectedDate);
+                        appointmentDetails
+                            .setHairStylistName(selectedStylistValue);
                       },
                       items: stylistNames.map<DropdownMenuItem<String>>((
                         String value,
@@ -195,7 +171,7 @@ class _HomeState extends State<Home> {
                       horizontal: deviceSize.width * 0.02,
                     ),
                     child: Text(
-                      DateFormat.MMMEd().format(appointmentDate),
+                      DateFormat.MMMEd().format(selectedDate),
                       style: GoogleFonts.roboto(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -206,6 +182,8 @@ class _HomeState extends State<Home> {
                     onPressed: () => this._selectDate(
                       context,
                       appointmentDetails,
+                      today,
+                      selectedDate,
                     ),
                     iconSize: 20,
                     icon: Icon(
@@ -216,11 +194,11 @@ class _HomeState extends State<Home> {
               ),
               FutureBuilder<List<String>>(
                 future: hairstylistService.getStylistTimings(
-                    selectedStylistValue,
-                    appointmentDate), // function where you call your api
+                  selectedStylistValue,
+                  selectedDate,
+                ), // function where you call your api
                 builder: (BuildContext context,
                     AsyncSnapshot<List<String>> snapshot) {
-                  // AsyncSnapshot<Your object type>
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: Text('Please wait its loading...'));
                   } else {
@@ -260,7 +238,7 @@ class _HomeState extends State<Home> {
                           MaterialStateProperty.all<Color>(Colors.white),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushNamed(Services.routeName);
+                      Navigator.of(context).pushNamed("lkjlkjlk");
                     },
                     child: Text('Next'),
                   ),
