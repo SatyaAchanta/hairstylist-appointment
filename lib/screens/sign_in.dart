@@ -3,14 +3,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controller/user_auth_controller.dart';
 import '../storage/userService.dart';
-import '../authentication/social_sign_in.dart';
 
 class SignIn extends StatelessWidget {
   final UserService users = new UserService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> navigatorKey =
       new GlobalKey<NavigatorState>();
-  final SocialSignIn signIn = new SocialSignIn();
   final UserAuthController authController = Get.put(UserAuthController());
 
   @override
@@ -88,17 +86,16 @@ class SignIn extends StatelessWidget {
                         left: deviceSize.height * 0.1,
                       ),
                       child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          primary: Colors.black,
-                        ),
-                        child: Text(
-                          "Login With Email",
-                          style: GoogleFonts.roboto(fontSize: 16.0),
-                        ),
-                        onPressed: : (), {
-                          // TODO: email sign in here
-                        }
-                      ),
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.black,
+                          ),
+                          child: Text(
+                            "Login With Email",
+                            style: GoogleFonts.roboto(fontSize: 16.0),
+                          ),
+                          onPressed: () {
+                            // TODO: email sign in here
+                          }),
                     ),
                   ],
                 ),
