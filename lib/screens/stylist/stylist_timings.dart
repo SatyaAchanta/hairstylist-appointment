@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../controller/stylist_controller.dart';
 import '../../controller/appointment_controller.dart';
@@ -11,37 +12,53 @@ class StylistTimings extends StatelessWidget {
       Get.put(AppointmentController());
   StylistTimings({Key? key}) : super(key: key);
 
-  List<String>? getTimingsForDateSelected() {
-    var dateFormat = DateFormat("yyyy-MM-dd");
-    String shortDate = dateFormat.format(
-      appointmentController.appointment.value.appointmentDate,
-    );
-    return stylistController.stylist.value.availableTimes[shortDate];
-  }
-
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     Size deviceSize = mediaQuery.size;
+    var dateFormat = DateFormat("yyyy-MM-dd");
+    String shortDate = dateFormat.format(
+      appointmentController.appointment.value.appointmentDate,
+    );
     return Container(
-      margin: EdgeInsets.only(
-        top: deviceSize.height * 0.01,
+      margin: EdgeInsets.symmetric(
+        horizontal: deviceSize.width * 0.1,
+        vertical: deviceSize.height * 0.05,
       ),
-      child: GetX<StylistController>(
-        builder: (_) {
-          return GroupButton(
-            spacing: 10,
-            selectedColor: Colors.green,
-            borderRadius: BorderRadius.circular(5.0),
-            buttons: getTimingsForDateSelected()!,
-            onSelected: (i, selected) => {
-              stylistController.updateStylist(
-                stylistController.stylist.value.name,
-                appointmentController.appointment.value.appointmentDate,
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Select Time",
+              style: GoogleFonts.roboto(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+          ),
+          GetX<StylistController>(
+            builder: (_) {
+              return Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: deviceSize.height * 0.01,
+                ),
+                child: GroupButton(
+                  mainGroupAlignment: MainGroupAlignment.start,
+                  spacing: 10,
+                  selectedColor: Colors.green,
+                  borderRadius: BorderRadius.circular(5.0),
+                  buttons: _.stylist.value.availableTimes.isNotEmpty
+                      ? _.stylist.value.availableTimes[shortDate]!
+                      : [],
+                  onSelected: (i, selected) => {
+                    print("--- time selected is $i"),
+                  },
+                ),
+              );
             },
-          );
-        },
+          ),
+        ],
       ),
     );
   }

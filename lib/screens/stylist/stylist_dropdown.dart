@@ -55,7 +55,7 @@ class StylistDropdown extends StatelessWidget {
                   onChanged: (String? value) {
                     this.onStylistChange(value!);
                   },
-                  items: _.allStylists?.map<DropdownMenuItem<String>>((
+                  items: _.allStylists.map<DropdownMenuItem<String>>((
                     String value,
                   ) {
                     return DropdownMenuItem<String>(

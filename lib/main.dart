@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import './authentication/sign_in.dart';
+import 'screens/sign_in.dart';
 import 'screens/stylist/stylist.dart';
-import './controller/user_auth.dart';
-import 'about_stylist.dart';
+import 'controller/user_auth_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,8 +23,7 @@ class Main2 extends StatelessWidget {
         primaryColor: Colors.purple,
       ),
       routes: {
-        '/stylistSample': (context) => Stylist(),
-        '/stylist': (context) => AboutStylist(),
+        '/stylist': (context) => Stylist(),
       },
     );
   }

@@ -1,11 +1,15 @@
+import 'package:get/state_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class SocialSignIn {
-  // Checks for whether user session exists
-  bool isUserLoggedIn() {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    return currentUser != null ? true : false;
+class UserAuthController extends GetxController {
+  var sample = 1.obs;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  var userLoggedIn = (FirebaseAuth.instance.currentUser != null).obs;
+
+  void isUserLoggedIn() {
+    User? currentUser = auth.currentUser;
+    userLoggedIn = (currentUser != null).obs;
   }
 
   Future<UserCredential> signInWithGoogle() async {
@@ -30,6 +34,8 @@ class SocialSignIn {
       // TODO: Use Snackbar to display login failed
       print("---- userCredential is $userCredential");
     }
+
+    userLoggedIn = true.obs;
 
     return userCredential;
   }

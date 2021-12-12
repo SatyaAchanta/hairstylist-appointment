@@ -9,11 +9,13 @@ class StylistController extends GetxController {
     unavailableTimes: Map<String, List<String>>(),
   ).obs;
   final stylistService = new StylistService();
-  List<String>? allStylists = <String>[].obs;
+  List<String> allStylists = <String>[].obs;
 
   @override
-  void onInit() async {
-    await stylistService.stylistNames.then(
+  void onInit() {
+    fetchStylists();
+    /* Reference code snippet
+      await stylistService.stylistNames.then(
       (stylistNames) => {
         allStylists = stylistNames,
         stylist.update(
@@ -23,21 +25,48 @@ class StylistController extends GetxController {
         )
       },
     );
+
+    await stylistService.getStylistTimings(stylist.value.name).then(
+          (stylistInfo) => {
+            stylist.update(
+              (val) {
+                val = Stylist.convertToStylist(stylistInfo);
+              },
+            )
+          },
+        );*/
     super.onInit();
   }
 
   void fetchStylists() async {
-    await stylistService.stylistNames.then((value) => allStylists = value);
+    List<Stylist> stylists = [];
+    List<Map<String, dynamic>>? response =
+        await stylistService.getAllStylists();
+
+    for (var stylistInfo in response!) {
+      allStylists.add(stylistInfo["name"]);
+      stylists.add(Stylist.convertToStylist(stylistInfo));
+    }
+
+    stylist.update((val) {
+      val!.name = stylists[0].name;
+      val.age = stylists[0].age;
+      val.availableTimes = stylists[0].availableTimes;
+      val.unavailableTimes = stylists[0].unavailableTimes;
+    });
   }
 
   void updateStylist(String stylistName, DateTime appointmentDate) async {
     Map<String, dynamic>? stylistInfo =
         await stylistService.getStylistTimings(stylistName);
 
-    stylist.update((val) {
-      val = Stylist.convertToStylist(stylistInfo);
-    });
+    Stylist stylistSelected = Stylist.convertToStylist(stylistInfo);
 
-    print(stylist.toJson());
+    stylist.update((val) {
+      val!.name = stylistSelected.name;
+      val.age = stylistSelected.age;
+      val.availableTimes = stylistSelected.availableTimes;
+      val.unavailableTimes = stylistSelected.unavailableTimes;
+    });
   }
 }

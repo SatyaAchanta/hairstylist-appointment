@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../controller/user_auth.dart';
+import '../controller/user_auth_controller.dart';
 import '../storage/userService.dart';
-import '../about_stylist.dart';
-import 'social_sign_in.dart';
+import '../authentication/social_sign_in.dart';
 
 class SignIn extends StatelessWidget {
   final UserService users = new UserService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> navigatorKey =
       new GlobalKey<NavigatorState>();
-  SocialSignIn signIn = new SocialSignIn();
-  UserAuthController authController = Get.put(UserAuthController());
+  final SocialSignIn signIn = new SocialSignIn();
+  final UserAuthController authController = Get.put(UserAuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,6 @@ class SignIn extends StatelessWidget {
     final TextEditingController _passwordController = TextEditingController();
     MediaQueryData mediaQuery = MediaQuery.of(context);
     Size deviceSize = mediaQuery.size;
-    SocialSignIn socialSignIn = new SocialSignIn();
 
     return Scaffold(
       body: SafeArea(
@@ -94,20 +91,13 @@ class SignIn extends StatelessWidget {
                         style: OutlinedButton.styleFrom(
                           primary: Colors.black,
                         ),
-                        onPressed: () {
-                          // this.handleSignIn(
-                          //   "email",
-                          //   socialSignIn,
-                          //   userDetailsProvider,
-                          //   context,
-                          //   _emailController,
-                          //   _passwordController,
-                          // );
-                        },
                         child: Text(
                           "Login With Email",
                           style: GoogleFonts.roboto(fontSize: 16.0),
                         ),
+                        onPressed: : (), {
+                          // TODO: email sign in here
+                        }
                       ),
                     ),
                   ],

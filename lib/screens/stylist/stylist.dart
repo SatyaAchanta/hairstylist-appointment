@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../controller/stylist_controller.dart';
 import '../../screens/stylist/appointment_date.dart';
 import '../../screens/stylist/stylist_dropdown.dart';
+import '../../screens/stylist/stylist_timings.dart';
 
 class Stylist extends StatelessWidget {
   Stylist({Key? key}) : super(key: key);
@@ -15,9 +14,6 @@ class Stylist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQuery = MediaQuery.of(context);
-    Size deviceSize = mediaQuery.size;
-
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -25,6 +21,24 @@ class Stylist extends StatelessWidget {
             children: [
               AppointmentDate(),
               StylistDropdown(),
+              StylistTimings(),
+              Container(
+                child: Center(
+                  child: ElevatedButton.icon(
+                    label: Text(
+                      "Confirm Appointment",
+                      style: GoogleFonts.roboto(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    icon: Icon(
+                      Icons.check_sharp,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              )
             ],
           ),
         ),
