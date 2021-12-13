@@ -20,6 +20,7 @@ class StylistTimings extends StatelessWidget {
     String shortDate = dateFormat.format(
       appointmentController.appointment.value.appointmentDate,
     );
+    List<String> availableTimes = [];
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: deviceSize.width * 0.1,
@@ -39,6 +40,9 @@ class StylistTimings extends StatelessWidget {
           ),
           GetX<StylistController>(
             builder: (_) {
+              availableTimes = _.stylist.value.availableTimes.isNotEmpty
+                  ? _.stylist.value.availableTimes[shortDate]!
+                  : [];
               return Container(
                 margin: EdgeInsets.symmetric(
                   vertical: deviceSize.height * 0.01,
@@ -48,11 +52,12 @@ class StylistTimings extends StatelessWidget {
                   spacing: 10,
                   selectedColor: Colors.green,
                   borderRadius: BorderRadius.circular(5.0),
-                  buttons: _.stylist.value.availableTimes.isNotEmpty
-                      ? _.stylist.value.availableTimes[shortDate]!
-                      : [],
+                  buttons: availableTimes,
                   onSelected: (i, selected) => {
-                    print("--- time selected is $i"),
+                    appointmentController.setAppointmentDetails(
+                      availableTimes[i],
+                      stylistController.stylist.value.name,
+                    ),
                   },
                 ),
               );

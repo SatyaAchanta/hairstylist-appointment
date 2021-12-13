@@ -14,27 +14,6 @@ class StylistController extends GetxController {
   @override
   void onInit() {
     fetchStylists();
-    /* Reference code snippet
-      await stylistService.stylistNames.then(
-      (stylistNames) => {
-        allStylists = stylistNames,
-        stylist.update(
-          (val) {
-            val!.name = stylistNames![0];
-          },
-        )
-      },
-    );
-
-    await stylistService.getStylistTimings(stylist.value.name).then(
-          (stylistInfo) => {
-            stylist.update(
-              (val) {
-                val = Stylist.convertToStylist(stylistInfo);
-              },
-            )
-          },
-        );*/
     super.onInit();
   }
 
