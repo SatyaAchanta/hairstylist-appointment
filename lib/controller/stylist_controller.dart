@@ -1,4 +1,5 @@
 import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import '../models/stylist.dart';
 import '../services/stylist_service.dart';
 
@@ -8,7 +9,7 @@ class StylistController extends GetxController {
     availableTimes: Map<String, List<String>>(),
     unavailableTimes: Map<String, List<String>>(),
   ).obs;
-  final stylistService = new StylistService();
+  final stylistService = Get.put(StylistService());
   List<String> allStylists = <String>[].obs;
 
   @override

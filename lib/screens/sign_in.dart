@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controller/user_auth_controller.dart';
-import '../storage/userService.dart';
 
 class SignIn extends StatelessWidget {
-  final UserService users = new UserService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> navigatorKey =
       new GlobalKey<NavigatorState>();

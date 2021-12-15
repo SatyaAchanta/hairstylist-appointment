@@ -8,8 +8,8 @@ import '../utils/date_util.dart';
 
 class AppointmentController extends GetxController {
   final appointment = Appointment(appointmentDate: DateTime.now()).obs;
-  final AppointmentService service = new AppointmentService();
-  final StylistService stylistService = new StylistService();
+  final AppointmentService service = Get.put(AppointmentService());
+  final StylistService stylistService = Get.put(StylistService());
 
   void setAppointmentDate(DateTime appointmentDate) {
     appointment.update((val) {
