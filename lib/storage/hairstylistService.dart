@@ -7,7 +7,6 @@ class HairstylistService {
 
   Future<List<String>> getStylistTimings(
       String name, DateTime appointmentDate) async {
-    List<String> _availableTimes = [];
     DocumentReference _stylistDoc = _stylists.doc(name.toLowerCase());
     var newFormat = DateFormat("yyyy-MM-dd");
     String _customerPreferredDate = newFormat.format(appointmentDate);

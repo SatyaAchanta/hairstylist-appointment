@@ -24,7 +24,7 @@ class StylistController extends GetxController {
 
     for (var stylistInfo in response!) {
       allStylists.add(stylistInfo["name"]);
-      stylists.add(Stylist.convertToStylist(stylistInfo));
+      stylists.add(Stylist.fromJson(stylistInfo));
     }
 
     stylist.update((val) {
@@ -37,9 +37,9 @@ class StylistController extends GetxController {
 
   void updateStylist(String stylistName, DateTime appointmentDate) async {
     Map<String, dynamic>? stylistInfo =
-        await stylistService.getStylistTimings(stylistName);
+        await stylistService.getStylist(stylistName);
 
-    Stylist stylistSelected = Stylist.convertToStylist(stylistInfo);
+    Stylist stylistSelected = Stylist.fromJson(stylistInfo!);
 
     stylist.update((val) {
       val!.name = stylistSelected.name;

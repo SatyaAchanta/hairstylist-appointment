@@ -8,11 +8,11 @@ import 'controller/user_auth_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(Main2());
+  runApp(Main());
 }
 
-class Main2 extends StatelessWidget {
-  const Main2({Key? key}) : super(key: key);
+class Main extends StatelessWidget {
+  const Main({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,6 @@ import '../models/user_details.dart';
 
 class UserService {
   CollectionReference _users = FirebaseFirestore.instance.collection('users');
-  CollectionReference _appointments =
-      FirebaseFirestore.instance.collection('appointments');
 
   Future<void> addUser(String email, String displayName) {
     return _users

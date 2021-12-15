@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
 import '../../screens/stylist/appointment_date.dart';
 import '../../screens/stylist/stylist_dropdown.dart';
 import '../../screens/stylist/stylist_timings.dart';

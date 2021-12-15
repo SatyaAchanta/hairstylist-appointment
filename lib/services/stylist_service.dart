@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/stylist.dart';
 
 class StylistService {
   CollectionReference _stylistCollection =
@@ -26,7 +27,7 @@ class StylistService {
     return stylits;
   }
 
-  Future<Map<String, dynamic>?> getStylistTimings(String stylistName) async {
+  Future<Map<String, dynamic>?> getStylist(String stylistName) async {
     DocumentReference _stylistDoc =
         _stylistCollection.doc(stylistName.toLowerCase());
 
@@ -40,5 +41,15 @@ class StylistService {
     }
 
     return Map<String, dynamic>();
+  }
+
+  Future<bool> updateStylistTimings(Stylist stylist) async {
+    Map<String, dynamic> stylistInfo = stylist.toJson();
+    try {
+      await _stylistCollection.doc(stylistInfo["name"]).update(stylistInfo);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
