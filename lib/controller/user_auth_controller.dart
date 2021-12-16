@@ -1,8 +1,10 @@
 import 'package:get/state_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../models/user_details.dart';
 
 class UserAuthController extends GetxController {
+  final user = UserDetails().obs;
   var sample = 1.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   var userLoggedIn = (FirebaseAuth.instance.currentUser != null).obs;
@@ -36,6 +38,11 @@ class UserAuthController extends GetxController {
     }
 
     userLoggedIn = true.obs;
+
+    user.update((val) {
+      val!.email = userCredential.user!.email;
+      val.name = userCredential.user!.displayName;
+    });
 
     return userCredential;
   }

@@ -4,12 +4,14 @@ import '../models/appointment.dart';
 import '../models/stylist.dart';
 import '../services/appointments_service.dart';
 import '../services/stylist_service.dart';
+import '../controller/stylist_controller.dart';
 import '../utils/date_util.dart';
 
 class AppointmentController extends GetxController {
   final appointment = Appointment(appointmentDate: DateTime.now()).obs;
   final AppointmentService service = Get.put(AppointmentService());
   final StylistService stylistService = Get.put(StylistService());
+  final StylistController stylistController = Get.put(StylistController());
 
   void setAppointmentDate(DateTime appointmentDate) {
     appointment.update((val) {
@@ -33,7 +35,7 @@ class AppointmentController extends GetxController {
     );
   }
 
-  void scheduleAppointment(String useremail) async {
+  Future<bool> scheduleAppointment(String? useremail) async {
     /**
      * Steps:
      * 1. using stylistname, check whether time is still available
@@ -59,8 +61,27 @@ class AppointmentController extends GetxController {
         appointmentDate,
       );
 
-      stylistService.updateStylistTimings(stylistWithUpdatedTimings);
+      /**
+       * if stylist is available
+       * reserve stylist timings first
+       * and if timings are updated/reserved
+       * then add appointment
+       */
+      bool isStylistTimingUpdated =
+          await stylistService.updateStylistTimings(stylistWithUpdatedTimings);
+
+      if (isStylistTimingUpdated) {
+        bool isAppointmentScheduled =
+            await service.scheduleAppointment(appointment.value, useremail!);
+
+        if (isAppointmentScheduled) {
+          Get.snackbar("Success", "Your appointment is scheduled");
+          return true;
+        }
+      }
     }
+    Get.snackbar("Oops", "Unable to schedule your appointment. Try again");
+    return false;
   }
 
   int convertAppointmentTimeToMillis(
