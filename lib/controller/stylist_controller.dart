@@ -36,7 +36,7 @@ class StylistController extends GetxController {
     });
   }
 
-  void updateStylist(String stylistName, DateTime appointmentDate) async {
+  void updateStylist(String stylistName) async {
     Map<String, dynamic>? stylistInfo =
         await stylistService.getStylist(stylistName);
 

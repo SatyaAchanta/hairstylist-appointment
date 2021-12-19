@@ -34,9 +34,27 @@ class ScheduleAppointment extends StatelessWidget {
               textConfirm: "Confirm",
               textCancel: "Cancel",
               onConfirm: () {
-                appointmentController.scheduleAppointment(
-                  userController.user.value.name,
-                );
+                appointmentController
+                    .scheduleAppointment(
+                      userController.user.value.email,
+                    )
+                    .then((value) => {
+                          Get.snackbar(
+                            value ? "Success" : "Oops",
+                            value
+                                ? "Your appointment is scheduled"
+                                : "Try selecting different time",
+                          ),
+                          stylistController.updateStylist(
+                            stylistController.stylist.value.name,
+                          ),
+                        })
+                    .catchError((err) => {
+                          Get.snackbar(
+                            "Oops",
+                            "Unable to finalize your appointment. Try selecting different time",
+                          ),
+                        });
                 Get.back();
               },
               onCancel: () {

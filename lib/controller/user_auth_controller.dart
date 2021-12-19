@@ -9,6 +9,16 @@ class UserAuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   var userLoggedIn = (FirebaseAuth.instance.currentUser != null).obs;
 
+  UserAuthController() {
+    if (userLoggedIn.isTrue) {
+      print("--- user is already logged in");
+      user.update((val) {
+        val!.email = auth.currentUser!.email;
+        val.name = auth.currentUser!.displayName;
+      });
+    }
+  }
+
   void isUserLoggedIn() {
     User? currentUser = auth.currentUser;
     userLoggedIn = (currentUser != null).obs;

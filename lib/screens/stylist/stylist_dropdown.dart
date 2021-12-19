@@ -14,7 +14,6 @@ class StylistDropdown extends StatelessWidget {
     print("--- stylist changed to $stylistName");
     stylistController.updateStylist(
       stylistName,
-      appointmentController.appointment.value.appointmentDate,
     );
   }
 

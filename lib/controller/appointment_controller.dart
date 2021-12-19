@@ -16,6 +16,8 @@ class AppointmentController extends GetxController {
   void setAppointmentDate(DateTime appointmentDate) {
     appointment.update((val) {
       val!.appointmentDate = appointmentDate;
+      print(
+          "---- updated appointment time is ${appointment.value.appointmentDate}");
     });
   }
 
@@ -35,18 +37,21 @@ class AppointmentController extends GetxController {
     );
   }
 
-  Future<bool> scheduleAppointment(String? useremail) async {
+  Future<bool> scheduleAppointment(
+    String? useremail,
+  ) async {
     /**
      * Steps:
      * 1. using stylistname, check whether time is still available
      * 2. If so, update available and unavailable timings lists for stylist
      * 3. Then, add appointment details to document with useremail in appointments collection
      */
-    var appointmentInfo = appointment.value;
+    var appointmentInfo = this.appointment.value;
     String appointmentDate = DateUtil.convertDateTimeToString(
       appointmentInfo.appointmentDate,
     );
 
+    print("---- appointmentInfo stylistName is ${appointmentInfo.stylistName}");
     Stylist stylist = await getStylist(appointmentInfo.stylistName);
     bool isStylistAvailable = await this.checkIfStylistIsAvailable(
       stylist,
@@ -55,6 +60,7 @@ class AppointmentController extends GetxController {
     );
 
     if (isStylistAvailable) {
+      print("--- stylist is availale");
       Stylist stylistWithUpdatedTimings = this.updateStylistTimings(
         stylist,
         appointmentInfo.appointmentTime,
@@ -70,17 +76,19 @@ class AppointmentController extends GetxController {
       bool isStylistTimingUpdated =
           await stylistService.updateStylistTimings(stylistWithUpdatedTimings);
 
+      print("---- stylist timing updated successfully");
       if (isStylistTimingUpdated) {
+        print("---- about to schedule appointment");
         bool isAppointmentScheduled =
             await service.scheduleAppointment(appointment.value, useremail!);
 
+        print("appointment schedule finished");
+
         if (isAppointmentScheduled) {
-          Get.snackbar("Success", "Your appointment is scheduled");
           return true;
         }
       }
     }
-    Get.snackbar("Oops", "Unable to schedule your appointment. Try again");
     return false;
   }
 
