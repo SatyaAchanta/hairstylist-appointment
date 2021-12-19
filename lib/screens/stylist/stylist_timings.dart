@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../controller/stylist_controller.dart';
 import '../../controller/appointment_controller.dart';
+import '../../utils/date_util.dart';
 
 class StylistTimings extends StatelessWidget {
   final StylistController stylistController = Get.put(StylistController());
@@ -16,10 +17,6 @@ class StylistTimings extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     Size deviceSize = mediaQuery.size;
-    var dateFormat = DateFormat("yyyy-MM-dd");
-    String shortDate = dateFormat.format(
-      appointmentController.appointment.value.appointmentDate,
-    );
     List<String> availableTimes = [];
     return Container(
       margin: EdgeInsets.symmetric(
@@ -41,7 +38,9 @@ class StylistTimings extends StatelessWidget {
           GetX<StylistController>(
             builder: (_) {
               availableTimes = _.stylist.value.availableTimes.isNotEmpty
-                  ? _.stylist.value.availableTimes[shortDate]!
+                  ? _.stylist.value.availableTimes[
+                      DateUtil.convertDateTimeToString(appointmentController
+                          .appointment.value.appointmentDate)]!
                   : [];
               return Container(
                 margin: EdgeInsets.symmetric(
