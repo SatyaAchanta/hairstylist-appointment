@@ -3,12 +3,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controller/stylist_controller.dart';
 import '../../controller/appointment_controller.dart';
-import '../../controller/user_auth_controller.dart';
 
 class ScheduleAppointment extends StatelessWidget {
   ScheduleAppointment({Key? key}) : super(key: key);
   final StylistController stylistController = Get.put(StylistController());
-  final UserAuthController userController = Get.put(UserAuthController());
   final AppointmentController appointmentController =
       Get.put(AppointmentController());
 
@@ -35,9 +33,7 @@ class ScheduleAppointment extends StatelessWidget {
               textCancel: "Cancel",
               onConfirm: () {
                 appointmentController
-                    .scheduleAppointment(
-                      userController.user.value.email,
-                    )
+                    .scheduleAppointment()
                     .then((value) => {
                           Get.snackbar(
                             value ? "Success" : "Oops",

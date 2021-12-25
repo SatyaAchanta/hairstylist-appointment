@@ -32,18 +32,20 @@ class AppointmentService {
       var docSnapshot = await userAppointments.get();
 
       if (docSnapshot.exists) {
-        List<Map<String, dynamic>>? appointments =
-            docSnapshot.data() as List<Map<String, dynamic>>;
+        print("--- doc exists");
+        Map<String, dynamic> appointmentsMap =
+            docSnapshot.data() as Map<String, dynamic>;
 
-        for (var appointment in appointments) {
+        for (var appointment in appointmentsMap['appointments']) {
           allAppointments.add(Appointment.fromJson(appointment));
         }
+        print("--- total appointments are ${allAppointments.length}");
       }
 
       print("--- total userAppointments are ${allAppointments.length}");
       return allAppointments;
     } catch (e) {
-      print("-- appointmentSchedule failed");
+      print("-- retrieveing userAppointments failed because ${e.toString()}");
       return allAppointments;
     }
   }

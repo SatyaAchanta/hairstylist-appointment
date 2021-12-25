@@ -4,14 +4,18 @@ import '../models/appointment.dart';
 import '../models/stylist.dart';
 import '../services/appointments_service.dart';
 import '../services/stylist_service.dart';
+import '../services/auth_service.dart';
 import '../controller/stylist_controller.dart';
 import '../utils/date_util.dart';
 
 class AppointmentController extends GetxController {
   final appointment = Appointment(appointmentDate: DateTime.now()).obs;
-  final AppointmentService service = Get.put(AppointmentService());
+  final userAppointments = [].obs;
+  final AppointmentService appointmentService = Get.put(AppointmentService());
   final StylistService stylistService = Get.put(StylistService());
+  final AuthService authService = Get.put(AuthService());
   final StylistController stylistController = Get.put(StylistController());
+  String userEmail = "";
 
   void setAppointmentDate(DateTime appointmentDate) {
     appointment.update((val) {
@@ -21,10 +25,15 @@ class AppointmentController extends GetxController {
     });
   }
 
-  void setAppointmentDetails(
-    String appointmentTime,
-    String stylistName,
-  ) {
+  @override
+  void onInit() {
+    print("---- inside onInit");
+    userEmail = authService.getCurrentUser().email!;
+    print("--- userEmail is $userEmail");
+    super.onInit();
+  }
+
+  void setAppointmentDetails(String appointmentTime, String stylistName) {
     appointment.update(
       (val) {
         val!.appointmentTime = appointmentTime;
@@ -37,9 +46,7 @@ class AppointmentController extends GetxController {
     );
   }
 
-  Future<bool> scheduleAppointment(
-    String? useremail,
-  ) async {
+  Future<bool> scheduleAppointment() async {
     /**
      * Steps:
      * 1. using stylistname, check whether time is still available
@@ -79,8 +86,8 @@ class AppointmentController extends GetxController {
       print("---- stylist timing updated successfully");
       if (isStylistTimingUpdated) {
         print("---- about to schedule appointment");
-        bool isAppointmentScheduled =
-            await service.scheduleAppointment(appointment.value, useremail!);
+        bool isAppointmentScheduled = await appointmentService
+            .scheduleAppointment(appointment.value, userEmail);
 
         print("appointment schedule finished");
 
@@ -90,6 +97,13 @@ class AppointmentController extends GetxController {
       }
     }
     return false;
+  }
+
+  Future<void> getAllUserAppointments() async {
+    userAppointments.clear();
+    List<Appointment> appointments =
+        await appointmentService.getUserAppointments(userEmail);
+    userAppointments.addAll(appointments);
   }
 
   int convertAppointmentTimeToMillis(

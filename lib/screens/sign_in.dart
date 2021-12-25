@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controller/user_auth_controller.dart';
+import '../screens/stylist/stylist.dart';
 
 class SignIn extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -46,7 +47,14 @@ class SignIn extends StatelessWidget {
                   style: GoogleFonts.roboto(fontSize: 16.0),
                 ),
                 onPressed: () {
-                  authController.signInWithGoogle();
+                  authController
+                      .signInWithGoogle()
+                      .then((value) => {
+                            Get.to(Stylist()),
+                          })
+                      .catchError((_) {
+                    Get.snackbar("Failed Login", "Please try again");
+                  });
                 },
               ),
             ),
