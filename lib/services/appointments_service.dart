@@ -10,14 +10,12 @@ class AppointmentService {
     String useremail,
   ) async {
     Map<String, dynamic> appointmentInfo = appointment.toJson();
-    print("-- appointmentInfo is ${appointmentInfo.toString()}");
     try {
       await _appointmentCollection.doc(useremail).update({
         "appointments": FieldValue.arrayUnion([appointmentInfo]),
       });
       return true;
     } catch (e) {
-      print("-- appointmentSchedule failed");
       return false;
     }
   }
