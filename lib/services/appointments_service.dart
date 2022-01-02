@@ -1,9 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hairstylist_appointment/models/appointment.dart';
+import 'package:flutter/material.dart';
+import '../models/appointment.dart';
 
 class AppointmentService {
-  CollectionReference _appointmentCollection =
+  CollectionReference appointmentCollection =
       FirebaseFirestore.instance.collection('appointments');
+
+  @visibleForTesting
+  CollectionReference get collectionReference {
+    return this.appointmentCollection;
+  }
+
+  @visibleForTesting
+  set collectionReference(CollectionReference reference) {
+    this.appointmentCollection = reference;
+  }
 
   Future<bool> scheduleAppointment(
     Appointment appointment,
@@ -11,7 +22,7 @@ class AppointmentService {
   ) async {
     Map<String, dynamic> appointmentInfo = appointment.toJson();
     try {
-      await _appointmentCollection.doc(useremail).update({
+      await appointmentCollection.doc(useremail).update({
         "appointments": FieldValue.arrayUnion([appointmentInfo]),
       });
       return true;
@@ -25,8 +36,7 @@ class AppointmentService {
   ) async {
     List<Appointment> allAppointments = [];
     try {
-      DocumentReference userAppointments =
-          _appointmentCollection.doc(useremail);
+      DocumentReference userAppointments = appointmentCollection.doc(useremail);
       var docSnapshot = await userAppointments.get();
 
       if (docSnapshot.exists) {
