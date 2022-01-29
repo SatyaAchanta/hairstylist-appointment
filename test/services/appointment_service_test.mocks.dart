@@ -6,7 +6,7 @@ import 'dart:async' as _i4;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:hairstylist_appointment/models/appointment.dart' as _i5;
-import 'package:hairstylist_appointment/services/appointments_service.dart'
+import 'package:hairstylist_appointment/repositories/appointment_repository.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -22,45 +22,28 @@ import 'package:mockito/mockito.dart' as _i1;
 class _FakeCollectionReference_0<T extends Object?> extends _i1.Fake
     implements _i2.CollectionReference<T> {}
 
-/// A class which mocks [AppointmentService].
+/// A class which mocks [AppointmentRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppointmentService extends _i1.Mock
-    implements _i3.AppointmentService {
-  MockAppointmentService() {
+class MockAppointmentRepository extends _i1.Mock
+    implements _i3.AppointmentRepository {
+  MockAppointmentRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.CollectionReference<Object?> get appointmentCollection =>
-      (super.noSuchMethod(Invocation.getter(#appointmentCollection),
+  _i2.CollectionReference<Object?> get repoReference =>
+      (super.noSuchMethod(Invocation.getter(#repoReference),
               returnValue: _FakeCollectionReference_0<Object?>())
           as _i2.CollectionReference<Object?>);
   @override
-  set appointmentCollection(
-          _i2.CollectionReference<Object?>? _appointmentCollection) =>
-      super.noSuchMethod(
-          Invocation.setter(#appointmentCollection, _appointmentCollection),
+  set repoReference(_i2.CollectionReference<Object?>? _repoReference) =>
+      super.noSuchMethod(Invocation.setter(#repoReference, _repoReference),
           returnValueForMissingStub: null);
   @override
-  _i2.CollectionReference<Object?> get collectionReference =>
-      (super.noSuchMethod(Invocation.getter(#collectionReference),
-              returnValue: _FakeCollectionReference_0<Object?>())
-          as _i2.CollectionReference<Object?>);
-  @override
-  set collectionReference(_i2.CollectionReference<Object?>? reference) =>
-      super.noSuchMethod(Invocation.setter(#collectionReference, reference),
-          returnValueForMissingStub: null);
-  @override
-  _i4.Future<bool> scheduleAppointment(
-          _i5.Appointment? appointment, String? useremail) =>
+  _i4.Future<bool> scheduleApppointment(
+          String? useremail, _i5.Appointment? appointment) =>
       (super.noSuchMethod(
-          Invocation.method(#scheduleAppointment, [appointment, useremail]),
+          Invocation.method(#scheduleApppointment, [useremail, appointment]),
           returnValue: Future<bool>.value(false)) as _i4.Future<bool>);
-  @override
-  _i4.Future<List<_i5.Appointment>> getUserAppointments(String? useremail) =>
-      (super.noSuchMethod(Invocation.method(#getUserAppointments, [useremail]),
-              returnValue:
-                  Future<List<_i5.Appointment>>.value(<_i5.Appointment>[]))
-          as _i4.Future<List<_i5.Appointment>>);
 }

@@ -1,30 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import '../models/appointment.dart';
+import '../repositories/appointment_repository.dart';
 
 class AppointmentService {
-  CollectionReference appointmentCollection =
-      FirebaseFirestore.instance.collection('appointments');
+  late AppointmentRepository repository;
 
-  @visibleForTesting
-  CollectionReference get collectionReference {
-    return this.appointmentCollection;
-  }
-
-  @visibleForTesting
-  set collectionReference(CollectionReference reference) {
-    this.appointmentCollection = reference;
+  AppointmentService([var appointmentRepo]) {
+    repository =
+        appointmentRepo != null ? appointmentRepo : AppointmentRepository();
   }
 
   Future<bool> scheduleAppointment(
     Appointment appointment,
     String useremail,
   ) async {
-    Map<String, dynamic> appointmentInfo = appointment.toJson();
     try {
-      await appointmentCollection.doc(useremail).update({
-        "appointments": FieldValue.arrayUnion([appointmentInfo]),
-      });
+      await repository.scheduleApppointment(useremail, appointment);
       return true;
     } catch (e) {
       return false;
@@ -36,8 +27,8 @@ class AppointmentService {
   ) async {
     List<Appointment> allAppointments = [];
     try {
-      DocumentReference userAppointments = appointmentCollection.doc(useremail);
-      var docSnapshot = await userAppointments.get();
+      DocumentSnapshot docSnapshot =
+          await repository.getUserAppointments(useremail);
 
       if (docSnapshot.exists) {
         print("--- doc exists");
